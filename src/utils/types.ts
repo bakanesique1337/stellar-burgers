@@ -1,3 +1,9 @@
+export enum IngredientType {
+  BUN = 'bun',
+  MAIN = 'main',
+  SAUCE = 'sauce'
+}
+
 export type TIngredient = {
   _id: string;
   name: string;

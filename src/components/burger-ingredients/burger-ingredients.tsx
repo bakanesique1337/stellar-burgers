@@ -1,16 +1,20 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-
-import { TTabMode } from '@utils-types';
-import { BurgerIngredientsUI } from '../ui/burger-ingredients';
+import { IngredientType, TTabMode } from '@utils-types';
+import { BurgerIngredientsUI } from '@ui';
+import { useSelector } from '../../services/store';
+import { selectIngredients } from '../../services/slices/burgerIngredientsSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+  const ingredients = useSelector(selectIngredients);
 
-  const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
+  const buns = ingredients.filter((item) => item.type === IngredientType.BUN);
+  const mains = ingredients.filter((item) => item.type === IngredientType.MAIN);
+  const sauces = ingredients.filter(
+    (item) => item.type === IngredientType.SAUCE
+  );
+
+  const [currentTab, setCurrentTab] = useState<TTabMode>(IngredientType.BUN);
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
@@ -29,26 +33,23 @@ export const BurgerIngredients: FC = () => {
 
   useEffect(() => {
     if (inViewBuns) {
-      setCurrentTab('bun');
+      setCurrentTab(IngredientType.BUN);
     } else if (inViewSauces) {
-      setCurrentTab('sauce');
+      setCurrentTab(IngredientType.SAUCE);
     } else if (inViewFilling) {
-      setCurrentTab('main');
+      setCurrentTab(IngredientType.MAIN);
     }
   }, [inViewBuns, inViewFilling, inViewSauces]);
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
-    if (tab === 'bun')
+    if (tab === IngredientType.BUN)
       titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main')
+    if (tab === IngredientType.MAIN)
       titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce')
+    if (tab === IngredientType.SAUCE)
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  return null;
-
   return (
     <BurgerIngredientsUI
       currentTab={currentTab}
