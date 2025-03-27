@@ -10,24 +10,34 @@ import {
   selectConstructorModalData
 } from '../../services/slices/burgerConstructorSlice';
 import { useNavigate } from 'react-router-dom';
-import { selectIsAuthChecked } from '../../services/slices/userSlice';
+import {
+  selectIsAuthChecked,
+  selectIsAuthenticated
+} from '../../services/slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const constructorItems = useSelector(selectConstructorItems);
-  const isUserAuthenticated = useSelector(selectIsAuthChecked);
+  const isUserAuthenticated = useSelector(selectIsAuthenticated);
+  const isUserAuthChecked = useSelector(selectIsAuthChecked);
   const orderRequest = useSelector(selectConstructorLoading);
   const orderModalData = useSelector(selectConstructorModalData);
 
   const onOrderClick = () => {
-    if (!isUserAuthenticated) {
+    if (!constructorItems?.bun || orderRequest) return;
+    if (!isUserAuthenticated || !isUserAuthChecked) {
+      console.log('user is not authenticated');
+      console.log('isUserAuthenticated:', isUserAuthenticated);
+      console.log('isUserAuthChecked:', isUserAuthChecked);
       navigate('/login');
       return;
     }
-    if (!constructorItems?.bun || orderRequest) return;
 
+    console.log('user is authenticated');
+    console.log('isUserAuthenticated:', isUserAuthenticated);
+    console.log('isUserAuthChecked:', isUserAuthChecked);
     dispatch(
       orderBurger([
         constructorItems.bun._id,

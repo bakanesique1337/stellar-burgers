@@ -16,7 +16,7 @@ const initialState: TIngredientsState = {
 
 export const getIngredients = createAsyncThunk(
   'ingredients/getAll',
-  async () => await getIngredientsApi()
+  getIngredientsApi
 );
 
 export const burgerIngredientsSlice = createSlice({
@@ -40,7 +40,7 @@ export const burgerIngredientsSlice = createSlice({
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.loading = false;
-        state.ingredients = action.payload;
+        state.ingredients = action.payload.data;
       });
   }
 });

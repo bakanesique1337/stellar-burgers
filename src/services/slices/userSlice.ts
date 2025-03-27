@@ -83,8 +83,9 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const getUserOrders = createAsyncThunk('user/getsUserOrders', async () =>
-  getOrdersApi()
+export const getUserOrders = createAsyncThunk(
+  'user/getsUserOrders',
+  getOrdersApi
 );
 
 export const resetPassword = createAsyncThunk(
@@ -149,6 +150,7 @@ export const userSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.loading = false;
         state.isAuthenticated = false;
+        state.isAuthChecked = false;
         state.user = null;
         state.orders = [];
       })
@@ -183,7 +185,7 @@ export const userSlice = createSlice({
         state.error = action.error.message ? action.error.message : '';
       })
       .addCase(getUserOrders.fulfilled, (state, action) => {
-        state.orders = action.payload;
+        state.orders = action.payload.orders;
       });
   }
 });

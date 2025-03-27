@@ -25,7 +25,7 @@ const App = () => {
   const navigate = useNavigate();
   const backgroundLocation = location.state?.background;
 
-  const closeModal = () => navigate(0);
+  const closeModal = () => navigate(-1);
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -39,6 +39,7 @@ const App = () => {
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
 
         <Route

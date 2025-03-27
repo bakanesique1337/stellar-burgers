@@ -1,12 +1,16 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
 import { loginUser, selectUserError } from '../../services/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
+import { TLoginData } from '@api';
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange } = useForm<TLoginData>({
+    email: '',
+    password: ''
+  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,7 +19,7 @@ export const Login: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password })).then(() => {
+    dispatch(loginUser(values)).then(() => {
       navigate('/');
     });
   };
@@ -23,10 +27,9 @@ export const Login: FC = () => {
   return (
     <LoginUI
       errorText={error}
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
+      email={values.email}
+      handleChange={handleChange}
+      password={values.password}
       handleSubmit={handleSubmit}
     />
   );
