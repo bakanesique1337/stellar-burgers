@@ -1,5 +1,5 @@
 import { setCookie, getCookie } from './cookie';
-import { TIngredient, TOrder, TOrdersData, TUser } from './types';
+import { TIngredient, TOrder, TUser } from './types';
 
 const BASE_URL = process.env.BURGER_API_URL;
 
@@ -21,7 +21,7 @@ const request = <T>(
   endpoint: RequestInfo,
   options?: RequestInit
 ): Promise<TServerResponse<T>> =>
-  fetch(`${BASE_URL}${endpoint}`, options)
+  fetch(`${BASE_URL}/${endpoint}`, options)
     .then(checkResponse<TServerResponse<T>>)
     .then(checkSuccess);
 
